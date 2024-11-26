@@ -9,10 +9,10 @@ from psycopg2 import sql
 import re
 from dotenv import load_dotenv
 import os
-# Set the path to the nltk_data directory in your project
+
 nltk_data_dir = '/opt/render/project/src/nltk_data'  # Render-specific directory
 
-# Ensure the directory exists on Render
+
 os.makedirs(nltk_data_dir, exist_ok=True)
 
 # Point NLTK to this directory
@@ -21,13 +21,13 @@ nltk.data.path.append(nltk_data_dir)
 # Download 'punkt' if it's not already present (this ensures it downloads to the correct location)
 nltk.download('punkt', download_dir=nltk_data_dir)
 
-# Load environment variables
+
 load_dotenv()
 
-# Streamlit Page Configuration
+
 st.set_page_config(layout="wide", page_title="Document Summarizer & Expertise Extractor")
 
-# API Key Configuration for Generative AI
+
 key = os.getenv('api_key')
 genai.configure(api_key=key) 
 
@@ -38,10 +38,7 @@ generation_config = {
     "max_output_tokens": 8192,
 }
 
-# # Download required NLTK packages
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger')
+
 
 
 def create_db_connection():
