@@ -10,6 +10,8 @@ import re
 from dotenv import load_dotenv
 import os
 
+nltk.data.path.append("/nltk_data")
+
 # Load environment variables
 load_dotenv()
 
