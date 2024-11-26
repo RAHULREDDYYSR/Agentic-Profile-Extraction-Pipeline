@@ -30,9 +30,9 @@ generation_config = {
 }
 
 # # Download required NLTK packages
-# nltk.download('punkt')
-# nltk.download('stopwords')
-# nltk.download('averaged_perceptron_tagger')
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
 
 
 def create_db_connection():
