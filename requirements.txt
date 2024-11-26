@@ -1,0 +1,6 @@
+streamlit
+python-dotenv
+psycopg2-binary
+PyPDF2
+nltk
+google-generativeai
