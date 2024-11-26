@@ -9,8 +9,17 @@ from psycopg2 import sql
 import re
 from dotenv import load_dotenv
 import os
+# Set the path to the nltk_data directory in your project
+nltk_data_dir = '/opt/render/project/src/nltk_data'  # Render-specific directory
 
-nltk.data.path.append("/nltk_data")
+# Ensure the directory exists on Render
+os.makedirs(nltk_data_dir, exist_ok=True)
+
+# Point NLTK to this directory
+nltk.data.path.append(nltk_data_dir)
+
+# Download 'punkt' if it's not already present (this ensures it downloads to the correct location)
+nltk.download('punkt', download_dir=nltk_data_dir)
 
 # Load environment variables
 load_dotenv()
