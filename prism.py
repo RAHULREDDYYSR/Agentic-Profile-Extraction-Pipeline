@@ -142,6 +142,27 @@ def get_existing_profile(connection, email):
         st.error(f"Error retrieving existing profile: {e}")
         return None
 
+def get_all_professors(connection):
+    """Retrieves all professors' names and emails from the database."""
+    try:
+        cursor = connection.cursor()
+        query = sql.SQL("""
+            SELECT name, email FROM prism_table
+        """)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        
+        if result:
+            return [{"name": row[0], "email": row[1]} for row in result]
+        else:
+            return []
+    except psycopg2.Error as e:
+        st.error(f"Error retrieving professors: {e}")
+        return []
+    finally:
+        if cursor:
+            cursor.close()
+
 
 # **Header Section**
 st.title("AI/MI | Professor Profile based Area of Expertise Analysis")
@@ -150,7 +171,7 @@ This tool allows you to extract and summarize information from documents,
 store the data in a database, and search for existing profiles by email or name.
 """)
 
-# **Main Layout: Two Columns**
+# **Main Layout: Three Sections**
 upload_col, search_col = st.columns(2)
 
 # **PDF Upload and Processing Section**
@@ -220,6 +241,20 @@ with search_col:
                 connection.close()
         else:
             st.error("Please enter a valid search input.")
+
+# **Show All Professors Section**
+st.header("All Professors Listing")
+
+if st.button("Show All Professors"):
+    connection = create_db_connection()
+    if connection:
+        professors = get_all_professors(connection)
+        if professors:
+            st.success("Professors retrieved successfully!")
+            st.table(professors)  # Display in a table format
+        else:
+            st.info("No professors found in the database.")
+        connection.close()
 
 # **Footer Section**
 st.markdown("---")
