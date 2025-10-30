@@ -1,8 +1,8 @@
 
 
-#  AI-Powered Resume Parser with LangGraph & Groq
+# Agentic Profile Extraction Pipeline
 
-This AI tool is a powerful, self-contained web application built with Streamlit that leverages the speed of Groq and the robustness of LangGraph to parse resumes, extract structured information, and store it in a database. The application provides a clean, interactive UI for uploading documents, searching for profiles, and viewing all entries.
+An advanced, self-contained web application that uses an agentic workflow to intelligently parse resumes and academic profiles. Built with a modern tech stack including LangGraph, Groq, and Streamlit, this tool extracts deep, structured information—including embedded hyperlinks—and stores it in a PostgreSQL database.
 
 ---
 
@@ -10,43 +10,38 @@ This AI tool is a powerful, self-contained web application built with Streamlit 
 
 Here is a quick overview of the application's user interface and workflow.
 
-![Prism AI Application Demo](assets/app-demo.png)
-
+![Application Demo](assets/app-demo.png)
 
 ---
 
 ## ✨ Key Features
 
--   **Multi-Format File Upload**: Accepts resumes in `.pdf`, `.docx`, and `.txt` formats.
--   **Intelligent Document Validation**: An initial LLM call verifies if the uploaded document is actually a resume before proceeding.
--   **Structured Data Extraction**: Uses LangChain with structured output (Pydantic) to reliably extract key information:
-    -   Full Name
-    -   Email Address
-    -   Professional Summary
-    -   Top Skills
-    -   PhD Title & University
-    -   Recent Projects & Publications
--   **Database Integration**: Automatically checks for duplicate profiles based on email and stores new, unique profiles in a PostgreSQL database.
--   **Interactive UI**: A clean, sidebar-navigated Streamlit interface allows users to:
-    -   Upload and process new resumes.
-    -   Search for existing profiles by email.
-    -   View a complete list of all stored profiles.
--   **Agentic Workflow with LangGraph**: The entire processing pipeline is managed by a LangGraph state machine, providing a clear, modular, and robust workflow.
+-   **Advanced Document Parsing**: Utilizes **PyMuPDF** to go beyond simple text extraction, accurately capturing embedded hyperlinks from PDFs for profiles like LinkedIn and GitHub. Also supports `.docx` and `.txt` formats.
+-   **Comprehensive Data Extraction**: Employs LangChain with Pydantic schemas to reliably extract a rich, structured dataset from each resume:
+    -   **Contact Info**: Name, Email, Phone, LinkedIn, GitHub, and Portfolio URLs.
+    -   **Professional Summary**: A concise summary of the candidate's profile.
+    -   **Skills**: A list of the top 5 most relevant skills.
+    -   **Work Experience**: A detailed history of jobs, including titles, companies, dates, and responsibilities.
+    -   **Education**: A complete list of degrees, institutions, and graduation dates.
+-   **Agentic Workflow with LangGraph**: The entire process—from document validation and deep parsing to data extraction and duplicate checking—is managed by a robust LangGraph state machine.
+-   **Rich Database Storage**: Stores profiles in a PostgreSQL database, using `JSONB` for flexible and queryable storage of work and education history.
+-   **Interactive UI**: A clean, sidebar-navigated Streamlit interface allows users to upload documents, search profiles by email, and view all entries.
 
 ## ⚙️ Tech Stack
 
--   **Frontend**: [Streamlit](https_streamlit.io/)
--   **LLM Provider**: [Groq](https://groq.com/) (for high-speed inference)
--   **Backend Orchestration**: [LangGraph](https://langchain-ai.github.io/langgraph/)
+-   **Frontend**: [Streamlit](https://streamlit.io/)
+-   **LLM Provider**: [Groq](https://groq.com/) (for high-speed Llama3 inference)
+-   **Orchestration**: [LangGraph](https://langchain-ai.github.io/langgraph/)
 -   **Core AI Framework**: [LangChain](https://www.langchain.com/)
+-   **Document Parsing**: [PyMuPDF](https://pymupdf.readthedocs.io/en/latest/)
 -   **Database**: [PostgreSQL](https://www.postgresql.org/)
--   **Language**: Python 3.9+
+-   **Language & Packaging**: Python 3.9+, `uv`
 
 ---
 
 ## 🏗️ Architecture: The LangGraph Flow
 
-The core of the application is an agentic workflow defined by a state graph. This graph ensures a predictable and logical flow for every document that is processed.
+The application's core is an agentic workflow that ensures a predictable, multi-step process for every document.
 
 ![LangGraph Flow Diagram](assets/langgraph-flow.png)
 
@@ -57,30 +52,31 @@ The core of the application is an agentic workflow defined by a state graph. Thi
 The project is organized into a modular structure to separate concerns, making it easy to maintain and extend.
 
 ```plaintext
-/prism-ai-parser/
+/agentic-profile-extraction-pipeline/
 |-- .env
 |-- requirements.txt
-|-- app.py                 # Main Streamlit application file
-|-- schemas.py             # Pydantic models for structured data
+|-- app.py
+|-- schemas.py
 |
 |-- services/
-|   |-- database.py        # Database interaction functions
-|   |-- file_parser.py     # Utility for parsing files
+|   |-- database.py
+|   |-- file_parser.py
 |
 |-- graph/
-|   |-- chains.py          # LLM chain definitions and initialization
-|   |-- graph.py           # LangGraph workflow definition and compilation
-|   |-- nodes.py           # Functions for each node in the graph
-|   |-- state.py           # GraphState definition
+|   |-- chains.py
+|   |-- graph.py
+|   |-- nodes.py
+|   |-- state.py
 |
 |-- ui_components/
-|   |-- list_all.py        # Streamlit component for listing profiles
-|   |-- search.py          # Streamlit component for searching
-|   |-- uploader.py        # Streamlit component for file uploading
+|   |-- list_all.py
+|   |-- search.py
+|   |-- uploader.py
 |
-|-- assets/                # (Create this folder for your images)
+|-- assets/
 |   |-- app-demo.gif
-|   |-- langgraph-flow.png```
+|   |-- langgraph-flow.png
+```
 
 ---
 
@@ -90,16 +86,22 @@ Follow these steps to set up and run the project locally.
 
 ### 1. Clone the Repository
 
+```bash
+git clone https://github.com/your-username/agentic-profile-extraction-pipeline.git
+cd agentic-profile-extraction-pipeline
+```
 
+### 2. Create Virtual Environment & Install Dependencies
 
-### 2. Create a Virtual Environment and Install Dependencies
-
-It is highly recommended to use a virtual environment.
+This project uses `uv` for fast package management.
 
 ```bash
+# Create and activate the virtual environment
 uv init
+
 source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-uv add -r requirements.txt
+
+
 ```
 
 ### 3. Set Up the PostgreSQL Database
@@ -107,17 +109,22 @@ uv add -r requirements.txt
 Ensure you have a running PostgreSQL instance.
 
 **A. Create the Database Table:**
-Connect to your database and run the following SQL command to create the necessary table:
+Connect to your database and run the following SQL command. This schema is designed to hold all the newly extracted fields.
 
 ```sql
 CREATE TABLE prism_table (
     id SERIAL PRIMARY KEY,
-    email VARCHAR(60) UNIQUE,
-    name VARCHAR(60),
+    email VARCHAR(50) UNIQUE,
+    name VARCHAR(100),
+    phone_number VARCHAR(50),
+    linkedin_url VARCHAR(100),
+    github_url VARCHAR(100),
+    portfolio_url VARCHAR(100),
     summary TEXT,
     top_area_of_expertise JSONB,
+    education JSONB,
+    work_experience JSONB,
     phd_title TEXT,
-    phd_from_college TEXT,
     latest_projects_and_publications JSONB,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -125,7 +132,7 @@ CREATE TABLE prism_table (
 
 ### 4. Configure Environment Variables
 
-Create a file named `.env` in the root of the project directory and add your credentials.
+Create a file named `.env` in the project's root directory.
 
 **⚠️ Important:** This file is the single source of truth for your API keys.
 
@@ -136,11 +143,12 @@ Create a file named `.env` in the root of the project directory and add your cre
 GROQ_API_KEY="gsk_YourActualGroqApiKeyHere"
 
 # Your PostgreSQL connection string
-POSTGRES_CONNECTION_STRING="postgresql://your_user:your_password@your_host:your_port/your_database"```
+POSTGRES_CONNECTION_STRING="postgresql://your_user:your_password@your_host:your_port/your_database"
+```
 
 ### 5. Run the Application
 
-Once the setup is complete, you can run the Streamlit application with a single command:
+Once the setup is complete, run the Streamlit app:
 
 ```bash
 uv run streamlit run app.py
@@ -152,7 +160,7 @@ The application will open in your default web browser.
 
 ## 💡 How to Use
 
-1.  **Launch the app**: Run the `streamlit run app.py` command.
-2.  **Ensure `.env` is configured**: The app will show an error if it cannot find the `GROQ_API_KEY`.
+1.  **Launch the App**: Run `streamlit run app.py`.
+2.  **Ensure `.env` is Configured**: The app will display an error on startup if it cannot find the `GROQ_API_KEY`.
 3.  **Navigate**: Use the sidebar to switch between the "Upload & Process," "Search Profiles," and "Show All Profiles" views.
-4.  **Upload**: In the upload view, choose a `.pdf`, `.docx`, or `.txt` file and watch the progress in the status container. The extracted data will appear below.
+4.  **Upload a Resume**: In the upload view, choose a `.pdf`, `.docx`, or `.txt` file. The status container will show the live progress, and the final extracted data will appear below.

@@ -1,10 +1,8 @@
-# app.py
+
 import streamlit as st
 from dotenv import load_dotenv
-
-# Load environment variables from .env file
 load_dotenv()
-# Import the UI components and the compiled graph
+
 from ui_components.uploader import render_uploader
 from ui_components.search import render_search
 from ui_components.list_all import render_list_all
@@ -24,7 +22,7 @@ if 'active_view' not in st.session_state:
 # --- Sidebar for Navigation ---
 # The sidebar will contain the buttons to toggle between different views.
 with st.sidebar:
-    st.title("📄 Prism AI")
+    st.title("📄 Resume AI")
     st.markdown("---")
     st.header("Navigation")
 

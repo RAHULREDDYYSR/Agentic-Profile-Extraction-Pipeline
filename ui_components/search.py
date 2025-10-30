@@ -1,4 +1,4 @@
-# ui_components/search.py
+
 import streamlit as st
 from services.database import check_if_profile_exists
 

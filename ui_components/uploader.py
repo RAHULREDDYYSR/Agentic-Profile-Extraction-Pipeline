@@ -1,4 +1,4 @@
-# ui_components/uploader.py
+
 import streamlit as st
 from services.file_parser import get_file_text
 from graph.state import GraphState

@@ -16,6 +16,7 @@ dependencies = [
     "nltk>=3.9.2",
     "psycopg2-binary>=2.9.11",
     "pydantic>=2.12.3",
+    "pymupdf>=1.26.5",
     "pypdf2>=3.0.1",
     "python-docx>=1.2.0",
     "python-dotenv>=1.2.1",

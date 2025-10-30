@@ -1,4 +1,4 @@
-# services/database.py
+
 import os
 import json
 import psycopg2
@@ -31,20 +31,35 @@ def check_if_profile_exists(email: str) -> dict:
     finally:
         if conn: conn.close()
 
+
 def insert_profile(profile_data: dict):
-    """Inserts a new profile into the database."""
+    """Inserts a new profile into the database, including structured data."""
     conn = create_db_connection()
     if not conn: return
     try:
         with conn.cursor() as cur:
+           
             query = sql.SQL("""
-                INSERT INTO prism_table (email, name, summary, top_area_of_expertise, phd_title, phd_from_college, latest_projects_and_publications)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO prism_table (
+                    email, name, summary, top_area_of_expertise, 
+                     latest_projects_and_publications,
+                    phone_number, linkedin_url, education, work_experience, github_url, portfolio_url
+                )
+                VALUES (%s,  %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """)
             cur.execute(query, (
-                profile_data.get('email'), profile_data.get('name'), profile_data.get('summary'),
-                json.dumps(profile_data.get('top_skills') or []), profile_data.get('phd_title'),
-                profile_data.get('phd_from_college'), json.dumps(profile_data.get('latest_three_projects_and_publications') or [])
+                profile_data.get('email'),
+                profile_data.get('name'),
+                profile_data.get('summary'),
+                json.dumps(profile_data.get('top_skills') or []),
+                json.dumps(profile_data.get('latest_three_projects_and_publications') or []),
+                
+                profile_data.get('phone_number'),
+                profile_data.get('linkedin_url'),
+                json.dumps(profile_data.get('education') or []), # Convert list of dicts to JSON string
+                json.dumps(profile_data.get('work_experience') or []),# Convert list of dicts to JSON string
+                profile_data.get('github_url'),
+                profile_data.get('portfolio_url')
             ))
             conn.commit()
     finally:
