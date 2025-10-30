@@ -112,8 +112,8 @@ Connect to your database and run the following SQL command to create the necessa
 ```sql
 CREATE TABLE prism_table (
     id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE,
-    name VARCHAR(255),
+    email VARCHAR(60) UNIQUE,
+    name VARCHAR(60),
     summary TEXT,
     top_area_of_expertise JSONB,
     phd_title TEXT,
