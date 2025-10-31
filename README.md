@@ -10,8 +10,8 @@ An advanced, self-contained web application that uses an agentic workflow to int
 
 Here is a quick overview of the application's user interface and workflow.
 
-![Application Demo](assets/app-demo.png)
-
+![Application Demo](assets/app-demo-1.png)
+![Application Demo](assets/app-demo-2.png)
 ---
 
 ## ✨ Key Features
